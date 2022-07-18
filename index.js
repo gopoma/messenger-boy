@@ -1,3 +1,7 @@
+"use strict";
+const production = false;
+const BASE_URL = production ? "" : "http://localhost:4000";
+
 function showLoginView() {
   const main = document.querySelector("#main");
   main.innerHTML = `
@@ -6,7 +10,8 @@ function showLoginView() {
       <div class="w-5/12 flex flex-col gap-2">
         <input class="border border-sky-300 p-2" type="text" id="email" placeholder="Enter your Email">
         <input class="border border-sky-300 p-2" type="password" id="password" placeholder="Enter your Password">
-        <button class="p-2 font-bold text-white bg-blue-600 transition-colors hover:bg-blue-800">Login</button>
+        <button onclick="doLogin()" class="p-2 font-bold text-white bg-blue-600 transition-colors hover:bg-blue-800">Login</button>
+
         <a href="http://localhost:4000/api/auth/google" class="p-1 flex gap-2 items-center bg-blue-500 transition-colors hover:bg-blue-600">
           <img class="w-10 h-10 p-2 bg-white" src="./img/google.svg" alt="Login with Google"></img>
           <span class="font-bold text-white">Login with Google</span>
@@ -26,6 +31,37 @@ function showLoginView() {
       </div>
     </div>
   `;
+}
+
+function renderMessages(messages) {
+  
+}
+
+function doLogin() {
+  const email = document.querySelector("#email");
+  const password = document.querySelector("#password");
+
+  const url = `${BASE_URL}/api/auth/login`;
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: email.value,
+      password: password.value
+    }),
+    credentials: "include"
+  })
+  .then(response => response.json())
+  .then(data => {
+    if(data.success) {
+      connectSocket();
+    } else {
+      console.log(data.errors);
+    }
+  })
+  .catch(console.log)
 }
 
 let socket;
@@ -73,7 +109,7 @@ fetch("http://localhost:4000/api/auth/validate", {
 })
 .catch(console.log)
 
-function doLogin() {
+function doLoginXD() {
   const email = document.querySelector("#email");
   const password = document.querySelector("#password");
   
