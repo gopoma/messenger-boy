@@ -3,13 +3,25 @@ function showLoginView() {
   main.innerHTML = `
     <div class="flex flex-col gap-2 items-center">
       <h2 class="p-2 text-2xl font-bold">Login</h2>
-      <div class="w-7/12 flex flex-col gap-2">
+      <div class="w-5/12 flex flex-col gap-2">
         <input class="border border-sky-300 p-2" type="text" id="email" placeholder="Enter your Email">
         <input class="border border-sky-300 p-2" type="password" id="password" placeholder="Enter your Password">
         <button class="p-2 font-bold text-white bg-blue-600 transition-colors hover:bg-blue-800">Login</button>
-        <a class="p-1 flex gap-2 items-center bg-blue-500 transition-colors hover:bg-blue-600" href="http://localhost:4000/api/auth/google">
+        <a href="http://localhost:4000/api/auth/google" class="p-1 flex gap-2 items-center bg-blue-500 transition-colors hover:bg-blue-600">
           <img class="w-10 h-10 p-2 bg-white" src="./img/google.svg" alt="Login with Google"></img>
           <span class="font-bold text-white">Login with Google</span>
+        </a>
+        <a href="http://localhost:4000/api/auth/facebook" class="p-2 flex gap-2 items-center bg-blue-800 transition-colors hover:bg-blue-900">
+          <img class="w-8 h-8" src="./img/facebook.svg">
+          <span class="font-bold text-white">Login with Facebook</span>
+        </a>
+        <a href="http://localhost:4000/api/auth/twitter" class="p-2 flex gap-2 items-center bg-blue-400 transition-colors hover:bg-blue-500">
+          <img class="w-8 h-8" src="./img/twitter.svg">
+          <span class="font-bold text-white">Login with Twitter</span>
+        </a>
+        <a href="http://localhost:4000/api/auth/github" class="p-2 flex gap-2 items-center bg-slate-800 transition-colors hover:bg-slate-900">
+          <img class="w-8 h-8" src="./img/github.svg">
+          <span class="font-bold text-white">Login with GitHub</span>
         </a>
       </div>
     </div>
