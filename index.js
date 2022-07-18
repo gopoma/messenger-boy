@@ -2,6 +2,25 @@
 const production = false;
 const BASE_URL = production ? "" : "http://localhost:4000";
 
+function renderMessages(messages) {
+  const messagesComponent = document.querySelector("#messages");
+  messagesComponent.innerHTML = "";
+  messages.forEach(message => {
+    messagesComponent.innerHTML += `
+      <div class="p-3 flex gap-4 justify-between items-center text-red-700 bg-red-100">
+        <span>${message}</span>
+        <span class="messageCloser cursor-pointer transition-colors hover:text-red-900">✘</span>
+      </div>
+    `;
+  });
+
+  document.querySelectorAll(".messageCloser").forEach(messageCloser => {
+    messageCloser.onclick = function(evt) {
+      evt.target.parentNode.parentNode.removeChild(evt.target.parentNode);
+    }
+  });
+}
+
 function showLoginView() {
   const main = document.querySelector("#main");
   main.innerHTML = `
@@ -31,25 +50,6 @@ function showLoginView() {
       </div>
     </div>
   `;
-}
-
-function renderMessages(messages) {
-  const messagesComponent = document.querySelector("#messages");
-  messagesComponent.innerHTML = "";
-  messages.forEach(message => {
-    messagesComponent.innerHTML += `
-      <div class="p-3 flex gap-4 justify-between items-center text-red-700 bg-red-100">
-        <span>${message}</span>
-        <span class="messageCloser cursor-pointer transition-colors hover:text-red-900">✘</span>
-      </div>
-    `;
-  });
-
-  document.querySelectorAll(".messageCloser").forEach(messageCloser => {
-    messageCloser.onclick = function(evt) {
-      evt.target.parentNode.parentNode.removeChild(evt.target.parentNode);
-    }
-  });
 }
 
 function doLogin() {
