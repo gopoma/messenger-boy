@@ -7,7 +7,7 @@ function showLoginView() {
   main.innerHTML = `
     <div class="flex flex-col gap-2 items-center">
       <h2 class="p-2 text-2xl font-bold">Login</h2>
-      <div class="w-5/12 flex flex-col gap-2">
+      <div class="w-7/12 lg:w-5/12 flex flex-col gap-2">
         <input class="border border-sky-300 p-2" type="text" id="email" placeholder="Enter your Email">
         <input class="border border-sky-300 p-2" type="password" id="password" placeholder="Enter your Password">
         <button onclick="doLogin()" class="p-2 font-bold text-white bg-blue-600 transition-colors hover:bg-blue-800">Login</button>
@@ -34,7 +34,22 @@ function showLoginView() {
 }
 
 function renderMessages(messages) {
-  
+  const messagesComponent = document.querySelector("#messages");
+  messagesComponent.innerHTML = "";
+  messages.forEach(message => {
+    messagesComponent.innerHTML += `
+      <div class="p-3 flex gap-4 justify-between items-center text-red-700 bg-red-100">
+        <span>${message}</span>
+        <span class="messageCloser cursor-pointer transition-colors hover:text-red-900">✘</span>
+      </div>
+    `;
+  });
+
+  document.querySelectorAll(".messageCloser").forEach(messageCloser => {
+    messageCloser.onclick = function(evt) {
+      evt.target.parentNode.parentNode.removeChild(evt.target.parentNode);
+    }
+  });
 }
 
 function doLogin() {
@@ -58,7 +73,7 @@ function doLogin() {
     if(data.success) {
       connectSocket();
     } else {
-      console.log(data.errors);
+      renderMessages(data.errors);
     }
   })
   .catch(console.log)
