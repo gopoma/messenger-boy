@@ -12,11 +12,19 @@
 <body>
   <h1 class="p-4 text-3xl font-bold">messenger-boy</h1>
   <div>
-    <input type="text" id="username">
+    <h2>Current User:</h2>
+    <p>Curent idUser: <span id="currentUserId"></span></p>
+    <p>Current idSocket: <span id="currentSocketId"></span></p>
+  </div>
+  <hr>
+  <div>
+    <input type="text" id="idUser" placeholder="idUser...">
     <button onclick="connect()">Connect</button>
   </div>
+  <hr>
   <div>
-    <input type="text" id="message">
+    <input type="text" id="idSocket" placeholder="idSocket...">
+    <input type="text" id="message" placeholder="message...">
     <button onclick="sendMessage()">Send Message</button>
   </div>
 </body>

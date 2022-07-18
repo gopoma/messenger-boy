@@ -1,9 +1,11 @@
 const socket = io.connect("http://localhost:4000");
 
 function connect() {
-  const username = document.querySelector("#username");
+  const idUser = document.querySelector("#idUser");
 
-  socket.emit("active", username.value);
+  document.querySelector("#currentUserId").innerText = idUser.value;
+  document.querySelector("#currentSocketId").innerText = socket.id;
+  socket.emit("userConnected", idUser.value);
 }
 
 socket.on("userConnected", activeUsers => {
@@ -15,11 +17,16 @@ socket.on("userDisconnected", activeUsers => {
 });
 
 function sendMessage() {
+  const idSocket = document.querySelector("#idSocket");
   const message = document.querySelector("#message");
 
-  socket.emit("sendMessage", message.value);
+  socket.emit("sendMessage", idSocket.value, message.value);
 }
 
 socket.on("messageReceived", messages => {
+  console.log(messages);
+});
+
+socket.on("messageSended", messages => {
   console.log(messages);
 });
