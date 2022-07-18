@@ -1,3 +1,7 @@
+function showLoginView() {
+  console.log("Login View");
+}
+
 let socket;
 
 function connectSocket() {
