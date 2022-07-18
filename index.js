@@ -1,11 +1,29 @@
-const socket = io.connect("http://localhost:4000");
+const socket = io.connect("http://localhost:4000", {
+  withCredentials: true
+});
+
+fetch("http://localhost:4000/api/auth/validate", {
+  credentials: "include"
+})
+.then(response => response.json())
+.then(console.log)
+.catch(console.log)
+
+function doLogout() {
+  fetch("http://localhost:4000/api/auth/logout", {
+    credentials: "include"
+  })
+  .then(response => response.json())
+  .then(console.log)
+  .catch(console.log)
+}
 
 function connect() {
   const idUser = document.querySelector("#idUser");
 
   document.querySelector("#currentUserId").innerText = idUser.value;
   document.querySelector("#currentSocketId").innerText = socket.id;
-  socket.emit("userConnected", idUser.value);
+  socket.emit("userConnected");
 }
 
 socket.on("userConnected", activeUsers => {
