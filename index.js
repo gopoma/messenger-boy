@@ -32,6 +32,47 @@ function showHome() {
   `;
 }
 
+// Auth Validation when refreshing
+fetch(`${BASE_URL}/api/auth/validate`, {credentials:"include"})
+.then(response => response.json())
+.then(data => {
+  if(data.success) {
+    user = data.user;
+    connectSocket();
+    showMenuUserLogged();
+  } else {
+    showRegularMenu();
+  }
+})
+.catch(console.log)
+
+function showRegularMenu() {
+  const menu = document.querySelector("#menu");
+  menu.innerHTML = `
+    <p onclick="showHome()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">Home</p>
+    <p onclick="showLoginView()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">Login</p>
+    <p onclick="showSignUpView()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">SignUp</p>
+  `;
+}
+
+function showMenuUserLogged() {
+  const menu = document.querySelector("#menu");
+  menu.innerHTML = `
+    <div class="relative">
+      <p onclick="showUserActions()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">${user.name}</p>
+      <div id="userActions" class="hidden absolute">
+        <div class="flex flex-col">
+          <p onclick="doLogout()" class="p-2 font-bold text-white bg-red-600 hover:bg-red-800 cursor-pointer transition-colors">Logout</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function showUserActions() {
+  document.querySelector("#userActions").classList.toggle("hidden");
+}
+
 function renderMessages(messages) {
   const messagesComponent = document.querySelector("#messages");
   messagesComponent.innerHTML = "";
@@ -103,7 +144,9 @@ function doLogin() {
     if(data.success) {
       user = data.user
       connectSocket();
+      showMenuUserLogged();
     } else {
+      password.value = "";
       renderMessages(data.errors);
     }
   })
@@ -193,12 +236,21 @@ function doSignUp() {
     if(data.success) {
       user = data.user;
       connectSocket();
+      showMenuUserLogged();
     } else {
       password.value = "";
       passwordConfirmation.value = "";
       renderMessages(data.errors.map(authError => authError.message));
     }
   })
+  .catch(console.log)
+}
+
+function doLogout() {
+  const url = `${BASE_URL}/api/auth/logout`;
+  fetch(url, {credentials:"include"})
+  .then(response => response.json())
+  .then(console.log)
   .catch(console.log)
 }
 
@@ -232,6 +284,8 @@ function connectSocket() {
   })
 }
 
+//////////////////////////////////////////////////
+/*
 fetch("http://localhost:4000/api/auth/validate", {
   credentials: "include"
 })
@@ -246,6 +300,8 @@ fetch("http://localhost:4000/api/auth/validate", {
   connectSocket();
 })
 .catch(console.log)
+
+///////////////////
 
 function doLoginXD() {
   const email = document.querySelector("#email");
@@ -275,7 +331,7 @@ function doLoginXD() {
   .catch(console.log());
 }
 
-function doLogout() {
+function doLogoutXD() {
   fetch("http://localhost:4000/api/auth/logout", {
     credentials: "include"
   })
@@ -283,6 +339,7 @@ function doLogout() {
   .then(console.log)
   .catch(console.log)
 }
+*/
 
 function beginChat() {
   const idChat = document.querySelector("#idChat");
