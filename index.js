@@ -101,6 +101,7 @@ function doLogin() {
   .then(response => response.json())
   .then(data => {
     if(data.success) {
+      user = data.user
       connectSocket();
     } else {
       renderMessages(data.errors);
@@ -190,7 +191,8 @@ function doSignUp() {
   .then(response => response.json())
   .then(data => {
     if(data.success) {
-      console.log(data);
+      user = data.user;
+      connectSocket();
     } else {
       password.value = "";
       passwordConfirmation.value = "";
