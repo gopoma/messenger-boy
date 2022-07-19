@@ -1,6 +1,36 @@
 "use strict";
 const production = false;
 const BASE_URL = production ? "" : "http://localhost:4000";
+let user = {}; // Filled when Validation or Login or SignUp goes successfully
+
+window.addEventListener("load", showHome);
+function showHome() {
+  const main = document.querySelector("#main");
+  main.innerHTML = `
+    <div class="flex justify-center items-center">
+      <div class="p-4 flex flex-col gap-2 bg-white">
+        <h2 class="text-lg font-bold">Bienvenido ${user.name ?? ""}</h2>
+        <p>Este sistema fue desarrollado haciendo uso de la Arquitectura Orientada a Servicios (SOA).</p>
+        <p>El sistema fué desarrollado usando estas tecnologías:</p>
+        <ul class="ml-5 list-disc">
+          <li>HTML y el Framework <strong>TailwindCSS</strong> para el CSS.</li>
+          <li><strong>Vanilla Javascript</strong> para el Frontend.</li>
+          <li><strong>NodeJS</strong> para el backend a través del framework <strong>Express</strong>.</li>
+          <li><strong>MongoDB</strong> para la base de datos.</li>
+          <li>El ODM <strong>Mongoose</strong> para la validación y modelado de objetos en el modelo.</li>
+          <li><strong>Passport</strong> para el inicio de sesión con redes sociales.</li>
+          <li><strong>HttpOnly Cookies</strong> para el control de flujo en la autenticación.</li>
+          <li><strong>busboy</strong> para el consumo de Streams.</li>
+          <li><strong>Cloudinary</strong> para el almacenamiento de archivos.</li>
+          <li><strong>Socket.io</strong> para la comuniación en Tiempo Real.</li>
+          <li>La comunicación entre el cliente y el servidor se hizo usando JSON de manera asíncrona.</li>
+          <li>El despliegue del backend fue realizado en <strong>Heroku</strong>.</li>
+          <li>El despliegue del frontend fue realizado en <strong>Vercel</strong>.</li>
+        </ul>
+      </div>
+    </div>
+  `;
+}
 
 function renderMessages(messages) {
   const messagesComponent = document.querySelector("#messages");
