@@ -98,7 +98,7 @@ function showSignUpView() {
           </div>
         </div>
         <input class="border border-sky-300 p-2" type="text" id="profilePic" placeholder="Profile Picture">
-        <button class="p-2 font-bold text-white bg-blue-600 transition-colors hover:bg-blue-800" onclick="doSignUp()">SignUp</button>
+        <button onclick="doSignUp()" class="p-2 font-bold text-white bg-blue-600 transition-colors hover:bg-blue-800" onclick="doSignUp()">SignUp</button>
 
         <a href="http://localhost:4000/api/auth/google" class="p-1 flex gap-2 items-center bg-blue-500 transition-colors hover:bg-blue-600">
           <img class="w-10 h-10 p-2 bg-white" src="./img/google.svg" alt="Login with Google"></img>
@@ -122,7 +122,52 @@ function showSignUpView() {
 }
 
 function doSignUp() {
-  console.log("Signing Up...");
+  const name = document.querySelector("#name");
+  const email = document.querySelector("#email");
+  const password = document.querySelector("#password");
+  const passwordConfirmation = document.querySelector("#passwordConfirmation");
+  const state = document.querySelector("#state");
+  const city = document.querySelector("#city");
+  const district = document.querySelector("#district");
+  const profilePic = document.querySelector("#profilePic");
+
+  if(password.value !== passwordConfirmation.value) {
+    password.value = "";
+    passwordConfirmation.value = "";
+    renderMessages(["Passwords don't match"]);
+    return;
+  }
+
+  const url = `${BASE_URL}/api/auth/signup`;
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      name: name.value,
+      email: email.value,
+      password: password.value,
+      location: {
+        state: state.value,
+        city: city.value,
+        district: district.value
+      },
+      profilePic: profilePic.value
+    }),
+    credentials: "include"
+  })
+  .then(response => response.json())
+  .then(data => {
+    if(data.success) {
+      console.log(data);
+    } else {
+      password.value = "";
+      passwordConfirmation.value = "";
+      renderMessages(data.errors.map(authError => authError.message));
+    }
+  })
+  .catch(console.log)
 }
 
 let socket;
