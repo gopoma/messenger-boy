@@ -60,8 +60,9 @@ function showMenuUserLogged() {
   const menu = document.querySelector("#menu");
   menu.innerHTML = `
     <p onclick="showHome()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">Home</p>
+    <p onclick="showUserData()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">Show Data</p>
     <div class="relative">
-      <p onclick="showUserActions()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">${user.name}</p>
+      <p onclick="toggleUserActions()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">${user.name}</p>
       <div id="userActions" class="hidden absolute">
         <div class="flex flex-col">
           <p onclick="doLogout()" class="p-2 font-bold text-white bg-red-600 hover:bg-red-800 cursor-pointer transition-colors">Logout</p>
@@ -72,7 +73,16 @@ function showMenuUserLogged() {
   showHome();
 }
 
-function showUserActions() {
+// Debugging function
+function showUserData() {
+  console.log(user);
+  fetch(`${BASE_URL}/api/chats`, {credentials:"include"})
+  .then(response => response.json())
+  .then(console.log)
+  .catch(console.log)
+}
+
+function toggleUserActions() {
   document.querySelector("#userActions").classList.toggle("hidden");
 }
 
