@@ -79,6 +79,33 @@ function doLogin() {
   .catch(console.log)
 }
 
+function showSignUpView() {
+  const main = document.querySelector("#main");
+  main.innerHTML = `
+    <div class="flex flex-col gap-2 items-center">
+      <h2 class="p-2 text-2xl font-bold">SignUp</h2>
+      <div>
+        <input type="text" id="name" placeholder="Enter your Name">
+        <input type="email" id="email" placeholder="Enter a Email">
+        <input type="password" id="password" placeholder="Enter a Password">
+        <input type="password" id="passwordConfirmation" placeholder="Confirm your Password">
+        <div>
+          <p>Location:</p>
+          <input type="text" id="state" placeholder="State">
+          <input type="text" id="city" placeholder="City">
+          <input type="text" id="district" placeholder="District">
+        </div>
+        <input type="text" id="profilePic" placeholder="Profile Picture">
+        <button onclick="doSignUp()">SignUp</button>
+      </div>
+    </div>
+  `;
+}
+
+function doSignUp() {
+  console.log("Signing Up...");
+}
+
 let socket;
 
 function connectSocket() {
