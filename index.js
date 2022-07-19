@@ -250,7 +250,10 @@ function doLogout() {
   const url = `${BASE_URL}/api/auth/logout`;
   fetch(url, {credentials:"include"})
   .then(response => response.json())
-  .then(console.log)
+  .then(() => {
+    showRegularMenu()
+    // TODO: We should disconnect to Socket...
+  })
   .catch(console.log)
 }
 
