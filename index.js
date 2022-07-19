@@ -2,6 +2,7 @@
 const production = false;
 const BASE_URL = production ? "" : "http://localhost:4000";
 let user = {}; // Filled when Validation or Login or SignUp goes successfully
+let socket;
 
 window.addEventListener("load", showHome);
 function showHome() {
@@ -253,13 +254,11 @@ function doLogout() {
   fetch(url, {credentials:"include"})
   .then(response => response.json())
   .then(() => {
-    showRegularMenu()
-    // TODO: We should disconnect to Socket...
+    showRegularMenu();
+    socket.disconnect();
   })
   .catch(console.log)
 }
-
-let socket;
 
 function connectSocket() {
   socket = io.connect("http://localhost:4000", {
