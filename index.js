@@ -84,19 +84,21 @@ function showSignUpView() {
   main.innerHTML = `
     <div class="flex flex-col gap-2 items-center">
       <h2 class="p-2 text-2xl font-bold">SignUp</h2>
-      <div>
-        <input type="text" id="name" placeholder="Enter your Name">
-        <input type="email" id="email" placeholder="Enter a Email">
-        <input type="password" id="password" placeholder="Enter a Password">
-        <input type="password" id="passwordConfirmation" placeholder="Confirm your Password">
-        <div>
-          <p>Location:</p>
-          <input type="text" id="state" placeholder="State">
-          <input type="text" id="city" placeholder="City">
-          <input type="text" id="district" placeholder="District">
+      <div class="w-7/12 lg:w-5/12 flex flex-col gap-2">
+        <input class="border border-sky-300 p-2" type="text" id="name" placeholder="Enter your Name">
+        <input class="border border-sky-300 p-2" type="email" id="email" placeholder="Enter a Email">
+        <input class="border border-sky-300 p-2" type="password" id="password" placeholder="Enter a Password">
+        <input class="border border-sky-300 p-2" type="password" id="passwordConfirmation" placeholder="Confirm your Password">
+        <div class="w-full flex gap-2 items-center">
+          <p class="w-2/12 p-2 font-bold">Location:</p>
+          <div class="w-10/12 flex gap-2">
+            <input class="w-1/3 border border-sky-300 p-2" type="text" id="state" placeholder="State">
+            <input class="w-1/3 border border-sky-300 p-2" type="text" id="city" placeholder="City">
+            <input class="w-1/3 border border-sky-300 p-2" type="text" id="district" placeholder="District">
+          </div>
         </div>
-        <input type="text" id="profilePic" placeholder="Profile Picture">
-        <button onclick="doSignUp()">SignUp</button>
+        <input class="border border-sky-300 p-2" type="text" id="profilePic" placeholder="Profile Picture">
+        <button class="p-2 font-bold text-white bg-blue-600 transition-colors hover:bg-blue-800" onclick="doSignUp()">SignUp</button>
       </div>
     </div>
   `;
