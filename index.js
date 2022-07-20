@@ -79,6 +79,7 @@ function showMenuUserLogged() {
 
 function showMyChats() {
   lookingAtChats = true;
+  destiny = {};
   const main = document.querySelector("#main");
   main.innerHTML = `
     <div style="min-height:83.5vh;" class="relative flex">
