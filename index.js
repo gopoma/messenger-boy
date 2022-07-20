@@ -60,6 +60,7 @@ function showMenuUserLogged() {
   const menu = document.querySelector("#menu");
   menu.innerHTML = `
     <p onclick="showHome()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">Home</p>
+    <p onclick="showMyChats()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">My Chats</p>
     <p onclick="showUserData()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">Show Data</p>
     <div class="relative">
       <p onclick="toggleUserActions()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">${user.name}</p>
@@ -71,6 +72,51 @@ function showMenuUserLogged() {
     </div>
   `;
   showHome();
+}
+
+function showMyChats() {
+  const main = document.querySelector("#main");
+  main.innerHTML = `
+    <div style="min-height:83.5vh;" class="flex">
+      <div class="w-2/12 bg-slate-400">
+        <div class="py-2 flex justify-center items-center">
+          <input oninput="showSearchResults()" class="w-11/12 rounded-md p-2 bg-slate-200" type="search" id="queryName" placeholder="Search in MessengerBoy">
+        </div>
+        <div id="userSearchResults"></div>
+      </div>
+      <div class="w-10/12 bg-blue-800"></div>
+    </div>
+  `;
+}
+
+function showSearchResults() {
+  const queryName = document.querySelector("#queryName");
+  const url = `${BASE_URL}/api/users/search?name=${queryName.value}`;
+  fetch(url, {credentials:"include"})
+  .then(response => response.json())
+  .then(users => {
+    const userSearchResults = document.querySelector("#userSearchResults");
+    userSearchResults.innerHTML = "";
+    if(users.length !== 0) {
+      users.forEach(user => {
+        userSearchResults.innerHTML += `
+          <div onclick="getOrCreateChat('${user._id}')" class="p-2 flex gap-2 items-center bg-white hover:bg-slate-200 cursor-pointer">
+            <img class="w-10 h-10" src="${user.profilePic}">
+            <p class="truncate">${user.name}</p>
+          </div>
+        `;
+      });
+    } else {
+      userSearchResults.innerHTML = `
+        <div>No Results...</div>
+      `;  
+    }
+  })
+  .catch(console.log)
+}
+
+function getOrCreateChat(idUser) {
+  console.log(idUser);
 }
 
 // Debugging function
