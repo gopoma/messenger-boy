@@ -67,7 +67,7 @@ function showMenuUserLogged() {
       <p onclick="toggleUserActions()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">${user.name}</p>
       <div id="userActions" class="hidden absolute">
         <div class="flex flex-col">
-          <p onclick="doLogout()" class="p-2 font-bold text-white bg-red-600 hover:bg-red-800 cursor-pointer transition-colors">Logout</p>
+          <p onclick="doLogout()" class="z-20 p-2 font-bold text-white bg-red-600 hover:bg-red-800 cursor-pointer transition-colors">Logout</p>
         </div>
       </div>
     </div>
@@ -78,12 +78,13 @@ function showMenuUserLogged() {
 function showMyChats() {
   const main = document.querySelector("#main");
   main.innerHTML = `
-    <div style="min-height:83.5vh;" class="flex">
+    <div style="min-height:83.5vh;" class="relative flex">
       <div class="w-2/12 bg-gray-100">
         <div class="py-2 flex justify-center items-center">
           <input oninput="showSearchResults()" class="w-11/12 rounded-md p-2 bg-slate-200" type="search" id="queryName" placeholder="Search in MessengerBoy">
         </div>
-        <div id="userSearchResults"></div>
+        <div id="userSearchResults" class="absolute w-2/12"></div>
+        <div id="channels"></div>
       </div>
       <div class="w-10/12 bg-slate-200">
         <div id="lookingAt" style="height:7.5vh;" class="flex items-center"></div>
@@ -93,9 +94,35 @@ function showMyChats() {
     </div>
   `;
 
-  document.querySelector("#messageInput").addEventListener("keypress", evt => {
-    if(evt.keyCode === 13) {sendMessage();}
+  const messageInput = document.querySelector("#messageInput");
+  messageInput.addEventListener("keypress", evt => {
+    if(destiny && messageInput.value.trim() && evt.keyCode === 13) {
+      sendMessage();
+      messageInput.value = "";
+    }
   });
+
+  showChannels();
+}
+
+function showChannels() {
+  const url = `${BASE_URL}/api/chats`;
+  fetch(url, {credentials:"include"})
+  .then(response => response.json())
+  .then(chats => {
+    const channels = document.querySelector("#channels");
+    channels.innerHTML = "";
+    chats.forEach(chat => {
+      const destiny = user.id === chat.userOne._id ? chat.userTwo : chat.userOne;
+      channels.innerHTML += `
+        <div onclick="bootstrapChat('${destiny._id}')" class="p-2 flex gap-2 justify-center md:justify-start items-center bg-white hover:bg-slate-200 cursor-pointer">
+          <img class="w-12 h-12" src="${destiny.profilePic}">
+          <p class="hidden md:block text-lg font-bold truncate">${destiny.name}</p>
+        </div>
+      `;
+    });
+  })
+  .catch(console.log)
 }
 
 function showSearchResults() {
@@ -146,7 +173,6 @@ function bootstrapChat(idUser) {
   fetch(url, {method:"POST", credentials:"include"})
   .then(response => response.json())
   .then(chat => {
-    console.log(chat);
     destiny = user.id === chat.userOne._id ? chat.userTwo : chat.userOne;
     document.querySelector("#lookingAt").innerHTML = `
       <div class="p-2 flex gap-2 items-center">
@@ -154,6 +180,7 @@ function bootstrapChat(idUser) {
         <p class="text-lg font-bold">${destiny.name}</p>
       </div>
     `;
+    showChannels();
     beginChat(chat._id);
   })
   .catch(console.log)
