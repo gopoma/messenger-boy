@@ -430,7 +430,7 @@ function connectSocket() {
       if(senderID === destiny._id) {
         document.querySelector("#messages").innerHTML += `
         <div class="flex justify-start">
-        <div class="rounded-md p-2 text-black bg-gray-300">${content}</div>
+          <div class="rounded-md p-2 text-black bg-gray-300">${content}</div>
         </div>
         `;
       }
