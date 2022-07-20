@@ -93,7 +93,7 @@ function showSearchResults() {
   const queryName = document.querySelector("#queryName");
   if(!queryName.value.trim()) {
     userSearchResults.innerHTML = `
-      <div>No Results...</div>
+      <p class="p-2 text-lg font-bold text-center bg-white">No results found</p>
     `;
     return;
   }
@@ -116,7 +116,7 @@ function showSearchResults() {
       });
     } else {
       userSearchResults.innerHTML = `
-        <div>No Results...</div>
+        <p class="p-2 text-lg font-bold text-center bg-white">No results found</p>
       `;  
     }
   })
