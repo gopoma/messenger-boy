@@ -100,9 +100,11 @@ function showSearchResults() {
     if(users.length !== 0) {
       users.forEach(user => {
         userSearchResults.innerHTML += `
-          <div onclick="getOrCreateChat('${user._id}')" class="p-2 flex gap-2 items-center bg-white hover:bg-slate-200 cursor-pointer">
-            <img class="w-10 h-10" src="${user.profilePic}">
-            <p class="truncate">${user.name}</p>
+          <div onclick="getOrCreateChat('${user._id}')" class="p-2 flex gap-2 justify-center md:justify-start items-center bg-white hover:bg-slate-200 cursor-pointer">
+            <div class="flex justify-center items-center">
+              <img class="w-10 h-10" src="${user.profilePic}">
+            </div>
+            <p class="hidden md:block truncate">${user.name}</p>
           </div>
         `;
       });
