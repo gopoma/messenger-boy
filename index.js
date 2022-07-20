@@ -105,6 +105,7 @@ function showMyChats() {
   showChannels();
 }
 
+// A channel has its id as a dataset and a channel class
 function showChannels() {
   const url = `${BASE_URL}/api/chats`;
   fetch(url, {credentials:"include"})
@@ -115,7 +116,7 @@ function showChannels() {
     chats.forEach(chat => {
       const destiny = user.id === chat.userOne._id ? chat.userTwo : chat.userOne;
       channels.innerHTML += `
-        <div onclick="bootstrapChat('${destiny._id}')" class="p-2 flex gap-2 justify-center md:justify-start items-center bg-white hover:bg-slate-200 cursor-pointer">
+        <div id="channel-${destiny._id}" onclick="bootstrapChat('${destiny._id}')" class="channel p-2 flex gap-2 justify-center md:justify-start items-center bg-white hover:bg-slate-200 cursor-pointer">
           <img class="w-12 h-12" src="${destiny.profilePic}">
           <p class="hidden md:block text-lg font-bold truncate">${destiny.name}</p>
         </div>
@@ -402,16 +403,33 @@ function connectSocket() {
     console.log(activeUsers);
   });
 
+  // destiny is the channel that we are lookingAt
   socket.on("messageReceived", messageData => {
-    const {senderID, content} = messageData;
+    const {senderID, senderName, senderProfilePic, content} = messageData;
+
+    // We have to grant the user that has sent the last message
+    const currentChannels = Array.from(document.querySelectorAll(".channel"));
+    const alreadyThere = currentChannels.find(channel => channel.id === `channel-${senderID}`);
+    console.log(alreadyThere);
+    // TODO: Verify lookingAt
+    if(alreadyThere) {
+      document.querySelector(`#channel-${senderID}`).parentNode.removeChild(alreadyThere);
+    }
+    const channels = document.querySelector("#channels");
+    channels.innerHTML = `
+      <div id="channel-${senderID}" onclick="bootstrapChat('${senderID}')" class="channel p-2 flex gap-2 justify-center md:justify-start items-center bg-white hover:bg-slate-200 cursor-pointer">
+        <img class="w-12 h-12" src="${senderProfilePic}">
+        <p class="hidden md:block text-lg font-bold truncate">${senderName}</p>
+      </div>
+    ` + channels.innerHTML;
+
     if(senderID === destiny._id) {
       document.querySelector("#messages").innerHTML += `
-        <div class="flex justify-start">
-          <div class="rounded-md p-2 text-black bg-gray-300">${content}</div>
-        </div>
+      <div class="flex justify-start">
+      <div class="rounded-md p-2 text-black bg-gray-300">${content}</div>
+      </div>
       `;
     }
-    console.log("Debugging:", senderID, destiny._id);
   });
   
   socket.on("messageSended", chat => {
