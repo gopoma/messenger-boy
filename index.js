@@ -106,7 +106,7 @@ function showSearchResults() {
     if(users.length !== 0) {
       users.forEach(user => {
         userSearchResults.innerHTML += `
-          <div onclick="getOrCreateChat('${user._id}')" class="userSearchResult p-2 flex gap-2 justify-center md:justify-start items-center bg-white hover:bg-slate-200 cursor-pointer">
+          <div onclick="bootstrapChat('${user._id}')" class="userSearchResult p-2 flex gap-2 justify-center md:justify-start items-center bg-white hover:bg-slate-200 cursor-pointer">
             <div class="flex justify-center items-center">
               <img class="w-10 h-10" src="${user.profilePic}">
             </div>
@@ -132,7 +132,7 @@ document.addEventListener("click", evt => {
   }
 })
 
-function getOrCreateChat(idUser) {
+function bootstrapChat(idUser) {
   console.log(idUser);
 }
 
@@ -418,10 +418,10 @@ function doLogoutXD() {
 }
 */
 
-function beginChat() {
-  const idChat = document.querySelector("#idChat");
-  socket.emit("beginChat", idChat.value);
-}
+// function beginChat() {
+//   const idChat = document.querySelector("#idChat");
+//   socket.emit("beginChat", idChat.value);
+// }
 
 function sendMessage() {
   const message = document.querySelector("#message");
