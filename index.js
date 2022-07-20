@@ -3,6 +3,7 @@ const production = false;
 const BASE_URL = production ? "" : "http://localhost:4000";
 let user = {}; // Filled when Validation or Login or SignUp goes successfully
 let socket;
+let destiny = {};
 
 window.addEventListener("load", showHome);
 function showHome() {
@@ -78,15 +79,23 @@ function showMyChats() {
   const main = document.querySelector("#main");
   main.innerHTML = `
     <div style="min-height:83.5vh;" class="flex">
-      <div class="w-2/12 bg-slate-400">
+      <div class="w-2/12 bg-gray-100">
         <div class="py-2 flex justify-center items-center">
           <input oninput="showSearchResults()" class="w-11/12 rounded-md p-2 bg-slate-200" type="search" id="queryName" placeholder="Search in MessengerBoy">
         </div>
         <div id="userSearchResults"></div>
       </div>
-      <div class="w-10/12 bg-blue-800"></div>
+      <div class="w-10/12 bg-slate-200">
+        <div id="lookingAt" style="height:7.5vh;" class="flex items-center"></div>
+        <div id="messages" style="height:70.7vh;" class="overflow-auto bg-white"></div>
+        <input id="messageInput" class="w-full p-2 border border-sky-300" type="text" placeholder="Enter a message">
+      </div>
     </div>
   `;
+
+  document.querySelector("#messageInput").addEventListener("keypress", evt => {
+    if(evt.keyCode === 13) {sendMessage();}
+  });
 }
 
 function showSearchResults() {
@@ -133,7 +142,25 @@ document.addEventListener("click", evt => {
 })
 
 function bootstrapChat(idUser) {
-  console.log(idUser);
+  const url = `${BASE_URL}/api/chats/${idUser}`;
+  fetch(url, {method:"POST", credentials:"include"})
+  .then(response => response.json())
+  .then(chat => {
+    console.log(chat);
+    destiny = user.id === chat.userOne._id ? chat.userTwo : chat.userOne;
+    document.querySelector("#lookingAt").innerHTML = `
+      <div class="p-2 flex gap-2 items-center">
+        <img class="w-12 h-12" src="${destiny.profilePic}">
+        <p class="text-lg font-bold">${destiny.name}</p>
+      </div>
+    `;
+    beginChat(chat._id);
+  })
+  .catch(console.log)
+}
+
+function beginChat(idChat) {
+  socket.emit("beginChat", idChat);
 }
 
 // Debugging function
@@ -348,82 +375,41 @@ function connectSocket() {
     console.log(activeUsers);
   });
 
-  socket.on("messageReceived", messages => {
-    console.log(messages);
-  });
-  
-  socket.on("messageSended", messages => {
-    console.log(messages);
-  });
-
-  socket.on("messages", messages => {
-    console.log(messages);
-  })
-}
-
-//////////////////////////////////////////////////
-/*
-fetch("http://localhost:4000/api/auth/validate", {
-  credentials: "include"
-})
-.then(response => {
-  if(response.ok) {
-    return response.json();
-  }
-
-  // throw new Error("Not Allowed");
-})
-.then(() => {
-  connectSocket();
-})
-.catch(console.log)
-
-///////////////////
-
-function doLoginXD() {
-  const email = document.querySelector("#email");
-  const password = document.querySelector("#password");
-  
-  fetch("http://localhost:4000/api/auth/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      email: email.value,
-      password: password.value
-    }),
-    credentials: "include"
-  })
-  .then(response => {
-    if(response.ok) {
-      return response.json();
+  socket.on("messageReceived", messageData => {
+    const {senderID, content} = messageData;
+    if(senderID === destiny._id) {
+      document.querySelector("#messages").innerHTML += `
+        <div class="flex justify-start">
+          <div class="rounded-md p-2 text-black bg-gray-300">${content}</div>
+        </div>
+      `;
     }
+    console.log("Debugging:", senderID, destiny._id);
+  });
+  
+  socket.on("messageSended", chat => {
+    renderSocketMessages(chat);
+  });
 
-    // throw new Error("Not Allowed");
+  socket.on("messages", chat => {
+    renderSocketMessages(chat);
   })
-  .then(() => {
-    connectSocket();
-  })
-  .catch(console.log());
 }
 
-function doLogoutXD() {
-  fetch("http://localhost:4000/api/auth/logout", {
-    credentials: "include"
-  })
-  .then(response => response.json())
-  .then(console.log)
-  .catch(console.log)
+function renderSocketMessages(chat) {
+  const messagesComponent = document.querySelector("#messages");
+  messagesComponent.innerHTML = "";
+  chat.messages.forEach(message => {
+    const sender = message.idSender === user.id;
+    messagesComponent.innerHTML += `
+      <div class="flex ${sender ? 'justify-end' : 'justify-start'}">
+        <div class="rounded-md p-2 ${sender ? 'text-white' : 'text-black'} ${sender ? 'bg-blue-500' : 'bg-gray-300'}">${message.content}</div>
+      </div>
+    `;
+  });
 }
-*/
-
-// function beginChat() {
-//   const idChat = document.querySelector("#idChat");
-//   socket.emit("beginChat", idChat.value);
-// }
 
 function sendMessage() {
-  const message = document.querySelector("#message");
-  socket.emit("sendMessage", message.value);
+  const messageInput = document.querySelector("#messageInput");
+  socket.emit("sendMessage", messageInput.value);
 }
