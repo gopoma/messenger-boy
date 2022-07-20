@@ -4,9 +4,11 @@ const BASE_URL = production ? "" : "http://localhost:4000";
 let user = {}; // Filled when Validation or Login or SignUp goes successfully
 let socket;
 let destiny = {};
+let lookingAtChats = false;
 
 window.addEventListener("load", showHome);
 function showHome() {
+  lookingAtChats = false;
   const main = document.querySelector("#main");
   main.innerHTML = `
     <div class="flex justify-center items-center">
@@ -76,6 +78,7 @@ function showMenuUserLogged() {
 }
 
 function showMyChats() {
+  lookingAtChats = true;
   const main = document.querySelector("#main");
   main.innerHTML = `
     <div style="min-height:83.5vh;" class="relative flex">
@@ -408,27 +411,30 @@ function connectSocket() {
     const {senderID, senderName, senderProfilePic, content} = messageData;
 
     // We have to grant the user that has sent the last message
-    const currentChannels = Array.from(document.querySelectorAll(".channel"));
-    const alreadyThere = currentChannels.find(channel => channel.id === `channel-${senderID}`);
-    console.log(alreadyThere);
-    // TODO: Verify lookingAt
-    if(alreadyThere) {
-      document.querySelector(`#channel-${senderID}`).parentNode.removeChild(alreadyThere);
-    }
-    const channels = document.querySelector("#channels");
-    channels.innerHTML = `
-      <div id="channel-${senderID}" onclick="bootstrapChat('${senderID}')" class="channel p-2 flex gap-2 justify-center md:justify-start items-center bg-white hover:bg-slate-200 cursor-pointer">
-        <img class="w-12 h-12" src="${senderProfilePic}">
-        <p class="hidden md:block text-lg font-bold truncate">${senderName}</p>
-      </div>
-    ` + channels.innerHTML;
+    if(lookingAtChats) {
+      const currentChannels = Array.from(document.querySelectorAll(".channel"));
+      const alreadyThere = currentChannels.find(channel => channel.id === `channel-${senderID}`);
+      if(alreadyThere) {
+        document.querySelector(`#channel-${senderID}`).parentNode.removeChild(alreadyThere);
+      }
 
-    if(senderID === destiny._id) {
-      document.querySelector("#messages").innerHTML += `
-      <div class="flex justify-start">
-      <div class="rounded-md p-2 text-black bg-gray-300">${content}</div>
-      </div>
-      `;
+      const channels = document.querySelector("#channels");
+      channels.innerHTML = `
+        <div id="channel-${senderID}" onclick="bootstrapChat('${senderID}')" class="channel p-2 flex gap-2 justify-center md:justify-start items-center bg-white hover:bg-slate-200 cursor-pointer">
+          <img class="w-12 h-12" src="${senderProfilePic}">
+          <p class="hidden md:block text-lg font-bold truncate">${senderName}</p>
+        </div>
+      ` + channels.innerHTML;
+  
+      if(senderID === destiny._id) {
+        document.querySelector("#messages").innerHTML += `
+        <div class="flex justify-start">
+        <div class="rounded-md p-2 text-black bg-gray-300">${content}</div>
+        </div>
+        `;
+      }
+    } else {
+      console.log("You are not in chats!:", content);
     }
   });
   
