@@ -91,6 +91,12 @@ function showMyChats() {
 
 function showSearchResults() {
   const queryName = document.querySelector("#queryName");
+  if(!queryName.value.trim()) {
+    userSearchResults.innerHTML = `
+      <div>No Results...</div>
+    `;
+    return;
+  }
   const url = `${BASE_URL}/api/users/search?name=${queryName.value}`;
   fetch(url, {credentials:"include"})
   .then(response => response.json())
@@ -100,7 +106,7 @@ function showSearchResults() {
     if(users.length !== 0) {
       users.forEach(user => {
         userSearchResults.innerHTML += `
-          <div onclick="getOrCreateChat('${user._id}')" class="p-2 flex gap-2 justify-center md:justify-start items-center bg-white hover:bg-slate-200 cursor-pointer">
+          <div onclick="getOrCreateChat('${user._id}')" class="userSearchResult p-2 flex gap-2 justify-center md:justify-start items-center bg-white hover:bg-slate-200 cursor-pointer">
             <div class="flex justify-center items-center">
               <img class="w-10 h-10" src="${user.profilePic}">
             </div>
@@ -116,6 +122,15 @@ function showSearchResults() {
   })
   .catch(console.log)
 }
+
+document.addEventListener("click", evt => {
+  if(!evt.target.classList.contains("userSearchResult")) {
+    const userSearchResults = document.querySelector("#userSearchResults");
+    if(userSearchResults) {
+      userSearchResults.innerHTML = "";
+    }
+  }
+})
 
 function getOrCreateChat(idUser) {
   console.log(idUser);
