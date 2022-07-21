@@ -119,8 +119,9 @@ function showChannels() {
     channels.innerHTML = "";
     chats.forEach(chat => {
       const destiny = user.id === chat.userOne._id ? chat.userTwo : chat.userOne;
+      const {read} = chat.messages[chat.messages.length - 1];
       channels.innerHTML += `
-        <div id="channel-${destiny._id}" onclick="bootstrapChat('${destiny._id}')" class="channel p-2 flex gap-2 justify-center md:justify-start items-center bg-white hover:bg-slate-200 cursor-pointer">
+        <div id="channel-${destiny._id}" onclick="bootstrapChat('${destiny._id}')" class="channel p-2 flex gap-2 justify-center md:justify-start items-center ${read ? 'bg-white hover:bg-slate-200' : 'bg-blue-400 hover:bg-blue-600'} cursor-pointer">
           <img class="w-12 h-12" src="${destiny.profilePic}">
           <p class="hidden md:block text-lg font-bold truncate">${destiny.name}</p>
         </div>
@@ -444,7 +445,7 @@ function connectSocket() {
   });
   
   socket.on("messageSended", chat => {
-    renderSocketMessages(chat);
+    showChannels();
   });
 
   socket.on("messages", chat => {
