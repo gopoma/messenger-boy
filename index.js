@@ -115,7 +115,7 @@ function showMyChats() {
       imgPreview.innerHTML = `
         <div class="max-w-max relative">
           <img class="w-20 h-20" src="${previewSource}">
-          <button onclick="clearImgInput()" class="absolute top-0 right-0 p-1 text-lg font-bold bg-white">✘</button>
+          <button onclick="clearImgInput()" class="absolute top-0 right-0 p-1 text-lg font-bold bg-white hover:bg-slate-200">✘</button>
         </div>
       `;
     } else {
