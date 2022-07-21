@@ -124,10 +124,24 @@ function showMyChats() {
   });
 
   const messageInput = document.querySelector("#messageInput");
-  messageInput.addEventListener("keypress", evt => {
-    if(Object.keys(destiny).length !== 0 && messageInput.value.trim() && evt.keyCode === 13) {
-      sendMessage();
-      messageInput.value = "";
+  messageInput.addEventListener("keypress", async evt => {
+    if(evt.keyCode === 13) {
+      if(Object.keys(destiny).length !== 0 && messageInput.value.trim()) {
+        sendMessage();
+        messageInput.value = "";
+      }
+
+      const [file] = messageImgInput.files;
+      if(file) {
+        const {location} = await uploadFile("messageImgInput");
+        messageInput.value = `
+          <img class="w-36 h-36" src="${location}">
+        `;
+        console.log(messageInput.value);
+        sendMessage();
+        messageInput.value = "";
+        clearImgInput();
+      }
     }
   });
 
