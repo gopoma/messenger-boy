@@ -4,6 +4,7 @@ const BASE_URL = production ? "" : "http://localhost:4000";
 let user = {}; // Filled when Validation or Login or SignUp goes successfully
 let socket;
 let destiny = {};
+let currentChatID;
 let lookingAtChats = false;
 
 window.addEventListener("load", showHome);
@@ -189,6 +190,7 @@ function bootstrapChat(idUser) {
     `;
     showChannels();
     beginChat(chat._id);
+    currentChatID = chat._id;
     if(chat.messages[chat.messages.length - 1]?.idSender !== user.id) {
       socket.emit("readChat", chat._id);
     }
@@ -419,11 +421,6 @@ function connectSocket() {
     // We have to grant the user that has sent the last message
     if(lookingAtChats) {
       showChannels();
-      /* const currentChannels = Array.from(document.querySelectorAll(".channel"));
-      const alreadyThere = currentChannels.find(channel => channel.id === `channel-${senderID}`);
-      if(alreadyThere) {
-        document.querySelector(`#channel-${senderID}`).parentNode.removeChild(alreadyThere);
-      } */
   
       const lookingAtHasSentMessage = senderID === destiny._id;
       if(lookingAtHasSentMessage) {
@@ -436,13 +433,9 @@ function connectSocket() {
         console.log("Another target than lookingAt has sent a message");
       }
 
-      /* const channels = document.querySelector("#channels");
-      channels.innerHTML = `
-        <div id="channel-${senderID}" onclick="bootstrapChat('${senderID}')" class="channel p-2 flex gap-2 justify-center md:justify-start items-center ${lookingAtHasSentMessage ? 'bg-white' : 'bg-blue-400'} hover:bg-slate-200 cursor-pointer">
-          <img class="w-12 h-12" src="${senderProfilePic}">
-          <p class="hidden md:block text-lg font-bold truncate">${senderName}</p>
-        </div>
-      ` + channels.innerHTML; */
+      if(senderID === destiny._id) {
+        socket.emit("readChat", currentChatID);
+      }
     } else {
       console.log("You are not in chats!:", content);
     }
