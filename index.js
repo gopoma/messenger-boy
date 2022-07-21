@@ -119,7 +119,8 @@ function showChannels() {
     channels.innerHTML = "";
     chats.forEach(chat => {
       const destiny = user.id === chat.userOne._id ? chat.userTwo : chat.userOne;
-      const {read} = chat.messages[chat.messages.length - 1];
+      const messages = chat.messages;
+      const read = messages.length !== 0 && messages[messages.length - 1].idSender !== user.id ? messages[messages.length - 1]?.read : true;
       channels.innerHTML += `
         <div id="channel-${destiny._id}" onclick="bootstrapChat('${destiny._id}')" class="channel p-2 flex gap-2 justify-center md:justify-start items-center ${read ? 'bg-white hover:bg-slate-200' : 'bg-blue-400 hover:bg-blue-600'} cursor-pointer">
           <img class="w-12 h-12" src="${destiny.profilePic}">
@@ -188,6 +189,9 @@ function bootstrapChat(idUser) {
     `;
     showChannels();
     beginChat(chat._id);
+    if(chat.messages[chat.messages.length - 1]?.idSender !== user.id) {
+      socket.emit("readChat", chat._id);
+    }
   })
   .catch(console.log)
 }
@@ -451,6 +455,10 @@ function connectSocket() {
   socket.on("messages", chat => {
     renderSocketMessages(chat);
   })
+
+  socket.on("readChat", () => {
+    showChannels();
+  });
 }
 
 function renderSocketMessages(chat) {
