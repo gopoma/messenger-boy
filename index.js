@@ -450,6 +450,7 @@ function connectSocket() {
   
   socket.on("messageSended", chat => {
     showChannels();
+    renderSocketMessages(chat);
   });
 
   socket.on("messages", chat => {
