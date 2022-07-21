@@ -487,7 +487,7 @@ function connectSocket() {
     // We have to grant the user that has sent the last message
     if(lookingAtChats) {
       showChannels();
-  
+
       const lookingAtHasSentMessage = senderID === destiny._id;
       if(lookingAtHasSentMessage) {
         document.querySelector("#messages").innerHTML += `
