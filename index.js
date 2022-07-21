@@ -91,13 +91,37 @@ function showMyChats() {
         <div id="userSearchResults" class="absolute w-2/12"></div>
         <div id="channels"></div>
       </div>
-      <div class="w-10/12 bg-slate-200">
+      <div class="w-10/12">
         <div id="lookingAt" style="height:7.5vh;" class="flex items-center"></div>
-        <div id="messages" style="height:70.7vh;" class="overflow-auto bg-white"></div>
-        <input id="messageInput" class="w-full p-2 border border-sky-300" type="text" placeholder="Enter a message">
+        <div id="messages" style="height:70.7vh;" class="overflow-auto flex flex-col gap-1 bg-white"></div>
+        <div id="imgPreview"></div>
+        <div class="flex items-center bg-white">
+          <input id="messageImgInput" class="hidden" type="file">
+          <button class="rounded-full p-2 flex justify-center items-center hover:bg-slate-200" onclick="document.querySelector('#messageImgInput').click();">
+            <svg viewBox="0 -1 17 17" height="20px" width="20px" class="a8c37x1j ms05siws hr662l2t b7h9ocf4"><g fill="none" fill-rule="evenodd"><path d="M2.882 13.13C3.476 4.743 3.773.48 3.773.348L2.195.516c-.7.1-1.478.647-1.478 1.647l1.092 11.419c0 .5.2.9.4 1.3.4.2.7.4.9.4h.4c-.6-.6-.727-.951-.627-2.151z" fill="#0084ff"></path><circle fill="#0084ff" cx="8.5" cy="4.5" r="1.5"></circle><path d="M14 6.2c-.2-.2-.6-.3-.8-.1l-2.8 2.4c-.2.1-.2.4 0 .6l.6.7c.2.2.2.6-.1.8-.1.1-.2.1-.4.1s-.3-.1-.4-.2L8.3 8.3c-.2-.2-.6-.3-.8-.1l-2.6 2-.4 3.1c0 .5.2 1.6.7 1.7l8.8.6c.2 0 .5 0 .7-.2.2-.2.5-.7.6-.9l.6-5.9L14 6.2z" fill="#0084ff"></path><path d="M13.9 15.5l-8.2-.7c-.7-.1-1.3-.8-1.3-1.6l1-11.4C5.5 1 6.2.5 7 .5l8.2.7c.8.1 1.3.8 1.3 1.6l-1 11.4c-.1.8-.8 1.4-1.6 1.3z" stroke="#0084ff" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>
+          </button>
+          <input id="messageInput" class="w-full p-2 border border-sky-300" type="text" placeholder="Enter a message">
+        </div>
       </div>
     </div>
   `;
+
+  const messageImgInput = document.querySelector("#messageImgInput");
+  messageImgInput.addEventListener("change", evt => {
+    const [file] = messageImgInput.files;
+    if(file) {
+      const imgPreview = document.querySelector("#imgPreview");
+      const previewSource = URL.createObjectURL(file);
+      imgPreview.innerHTML = `
+        <div class="max-w-max relative">
+          <img class="w-20 h-20" src="${previewSource}">
+          <button onclick="clearImgInput()" class="absolute top-0 right-0 p-1 text-lg font-bold bg-white">✘</button>
+        </div>
+      `;
+    } else {
+      renderMessages(["A wild Error has appeared!"]);
+    }
+  });
 
   const messageInput = document.querySelector("#messageInput");
   messageInput.addEventListener("keypress", evt => {
@@ -108,6 +132,11 @@ function showMyChats() {
   });
 
   showChannels();
+}
+
+function clearImgInput() {
+  document.querySelector("#imgPreview").innerHTML = "";
+  document.querySelector("#messageImgInput").value = null;
 }
 
 // A channel has its id as a dataset and a channel class
