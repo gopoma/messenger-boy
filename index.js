@@ -306,14 +306,17 @@ function showSignUpView() {
         <input class="border border-sky-300 p-2" type="password" id="password" placeholder="Enter a Password">
         <input class="border border-sky-300 p-2" type="password" id="passwordConfirmation" placeholder="Confirm your Password">
         <div class="w-full flex gap-2 items-center">
-          <p class="w-2/12 p-2 font-bold">Location:</p>
+          <label class="w-2/12 font-bold">Location:</label>
           <div class="w-10/12 flex gap-2">
             <input class="w-1/3 border border-sky-300 p-2" type="text" id="state" placeholder="State">
             <input class="w-1/3 border border-sky-300 p-2" type="text" id="city" placeholder="City">
             <input class="w-1/3 border border-sky-300 p-2" type="text" id="district" placeholder="District">
           </div>
         </div>
-        <input class="border border-sky-300 p-2" type="text" id="profilePic" placeholder="Profile Picture">
+        <div class="flex gap-2 items-center">
+          <label class="font-bold">Profile Picture:</label>
+          <input class="p-2" type="file" id="profilePic" placeholder="Profile Picture">
+        </div>
         <button onclick="doSignUp()" class="p-2 font-bold text-white bg-blue-600 transition-colors hover:bg-blue-800" onclick="doSignUp()">SignUp</button>
 
         <a href="http://localhost:4000/api/auth/google" class="p-1 flex gap-2 items-center bg-blue-500 transition-colors hover:bg-blue-600">
@@ -337,7 +340,26 @@ function showSignUpView() {
   `;
 }
 
-function doSignUp() {
+async function uploadFile(idFileInput) {
+  try {
+    const fileInput = document.querySelector(`#${idFileInput}`);
+
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+  
+    const url = `${BASE_URL}/api/files`;
+    const response = await fetch(url, {
+      method: "POST", 
+      body: formData,
+      credentials: "include"
+    });
+    return await response.json();
+  } catch(error) {
+    console.log(error);
+  }
+}
+
+async function doSignUp() {
   const name = document.querySelector("#name");
   const email = document.querySelector("#email");
   const password = document.querySelector("#password");
@@ -345,7 +367,6 @@ function doSignUp() {
   const state = document.querySelector("#state");
   const city = document.querySelector("#city");
   const district = document.querySelector("#district");
-  const profilePic = document.querySelector("#profilePic");
 
   if(password.value !== passwordConfirmation.value) {
     password.value = "";
@@ -354,6 +375,7 @@ function doSignUp() {
     return;
   }
 
+  const {location:profilePic} = await uploadFile("profilePic");
   const url = `${BASE_URL}/api/auth/signup`;
   fetch(url, {
     method: "POST",
@@ -369,7 +391,7 @@ function doSignUp() {
         city: city.value,
         district: district.value
       },
-      profilePic: profilePic.value
+      profilePic: profilePic
     }),
     credentials: "include"
   })
