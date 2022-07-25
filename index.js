@@ -530,19 +530,19 @@ function renderSocketMessages(chat) {
     const minutes = createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes();
     const messageDate = `${hours}:${minutes} hrs.`;
     let downloadComponent = "";
+    let contentComponent = message.content;
 
     if(message.isFile) {
       const [, location] = message.content.match(/^.*src="(.*)".*$/);
-      downloadComponent = `
-        <p onclick="downloadFile('${location}')" class="p-2 cursor-pointer hover:bg-slate-800">Descargar</p>
-      `;
+      contentComponent = `<div onclick="showFullImgModal('${location}')" class="cursor-pointer">${message.content}</div>`;
+      downloadComponent = `<p onclick="downloadFile('${location}')" class="p-2 cursor-pointer hover:bg-slate-800">Descargar</p>`;
     }
 
     const sender = message.idSender === user.id;
     messagesComponent.innerHTML += `
       <div class="flex ${sender ? 'justify-end mr-4' : 'justify-start ml-4'}">
         <div class="relative rounded-md p-2 ${message.isFile ? '' : 'pr-[75px]'} ${sender ? 'text-white' : 'text-black'} ${sender ? 'bg-blue-500' : 'bg-gray-300'}">
-          ${message.content}
+          ${contentComponent}
           <p class="absolute ${message.isFile ? 'rounded-md bg-slate-700 p-1 text-white' : 'pr-1'} bottom-0 right-0 text-sm">${messageDate}</p>
 
           <div onclick="toggleDropdownOptions('${message._id}')" class="absolute top-0 -right-4 opacity-75 rounded-full bg-slate-600 cursor-pointer">
@@ -557,6 +557,11 @@ function renderSocketMessages(chat) {
       </div>
     `;
   });
+}
+
+// TODO: Implement showFullImgModal functionality
+function showFullImgModal(location) {
+  console.log("Showing a Modal with this location:", location);
 }
 
 function toggleDropdownOptions(idMessage) {
