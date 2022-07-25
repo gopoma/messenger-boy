@@ -457,8 +457,9 @@ function doLogout() {
   const url = `${BASE_URL}/api/auth/logout`;
   fetch(url, {credentials:"include"})
   .then(response => response.json())
-  .then(() => {
+  .then(() => {+
     socket.disconnect();
+    user = {};
     showHome();
     showRegularMenu();
   })
