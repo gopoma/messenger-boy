@@ -529,9 +529,13 @@ function renderSocketMessages(chat) {
     const hours = createdAt.getHours();
     const minutes = createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes();
     const messageDate = `${hours}:${minutes} hrs.`;
+    let downloadComponent = "";
 
     if(message.isFile) {
       const [, location] = message.content.match(/^.*src="(.*)".*$/);
+      downloadComponent = `
+        <p onclick="downloadFile('${location}')" class="p-2 cursor-pointer hover:bg-slate-800">Descargar</p>
+      `;
     }
 
     const sender = message.idSender === user.id;
@@ -545,6 +549,7 @@ function renderSocketMessages(chat) {
             <img class="w-7 h-7" src="./img/arrow-down.svg">
           </div>
           <div id="message-options-${message._id}" class="hidden z-20 absolute top-5 -right-4 min-w-max	py-2 text-white bg-slate-700">
+            ${downloadComponent}
             <p onclick="showEditModal('${encodeURIComponent(JSON.stringify(message))}')" class="p-2 cursor-pointer hover:bg-slate-800">Editar mensaje</p>
             <p onclick="showDeleteModal('${encodeURIComponent(JSON.stringify(message))}')" class="p-2 cursor-pointer hover:bg-slate-800">Eliminar mensaje</pclass=>
           </div>
@@ -558,11 +563,33 @@ function toggleDropdownOptions(idMessage) {
   document.querySelector(`#message-options-${idMessage}`).classList.toggle("hidden");
 }
 
+function downloadFile(location) {
+  fetch(location)
+  .then(response => response.blob())
+  .then(blob => {
+    const [, fileName] = location.match(/^.*\/MessengerBoy\/(.*)\..*$/);
+    const href = URL.createObjectURL(blob);
+    const hiddenAnchor = Object.assign(document.createElement("a"), {
+      href,
+      class: "hidden",
+      download: fileName
+    });
+    document.body.appendChild(hiddenAnchor);
+
+    hiddenAnchor.click();
+    URL.revokeObjectURL(href);
+    hiddenAnchor.remove();
+  })
+  .catch(console.log)
+}
+
+// TODO: Implement Edit message functionality
 function showEditModal(messageData) {
   const message = JSON.parse(decodeURIComponent(messageData));
   console.log(message);
 }
 
+// TODO: Implement Delete message functionality
 function showDeleteModal(messageData) {
   const message = JSON.parse(decodeURIComponent(messageData));
   console.log(message);
