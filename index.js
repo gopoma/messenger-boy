@@ -409,6 +409,7 @@ async function doSignUp() {
   const state = document.querySelector("#state");
   const city = document.querySelector("#city");
   const district = document.querySelector("#district");
+  let profilePic = "";
 
   if(password.value !== passwordConfirmation.value) {
     password.value = "";
@@ -417,7 +418,10 @@ async function doSignUp() {
     return;
   }
 
-  const {location:profilePic} = await uploadFile("profilePic");
+  const result = await uploadFile("profilePic");
+  if(result) {
+    profilePic = result.location;
+  }
   const url = `${BASE_URL}/api/auth/signup`;
   fetch(url, {
     method: "POST",
