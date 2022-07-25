@@ -486,7 +486,7 @@ function connectSocket() {
 
   // destiny is the channel that we are lookingAt
   socket.on("messageReceived", messageData => {
-    const {senderID, senderName, senderProfilePic, content} = messageData;
+    const {senderID, senderName, senderProfilePic, chat, content} = messageData;
 
     // We have to grant the user that has sent the last message
     if(lookingAtChats) {
@@ -494,11 +494,7 @@ function connectSocket() {
 
       const lookingAtHasSentMessage = senderID === destiny._id;
       if(lookingAtHasSentMessage) {
-        document.querySelector("#messages").innerHTML += `
-        <div class="flex justify-start">
-          <div class="rounded-md p-2 text-black bg-gray-300">${content}</div>
-        </div>
-        `;
+        renderSocketMessages(chat);
       } else {
         console.log("Another target than lookingAt has sent a message");
       }
@@ -543,7 +539,7 @@ function renderSocketMessages(chat) {
       <div class="flex ${sender ? 'justify-end mr-4' : 'justify-start ml-4'}">
         <div class="relative rounded-md p-2 ${message.isFile ? '' : 'pr-[75px]'} ${sender ? 'text-white' : 'text-black'} ${sender ? 'bg-blue-500' : 'bg-gray-300'}">
           ${message.content}
-          <p class="absolute ${message.isFile ? 'rounded-md bg-slate-700 p-1' : 'pr-1'} bottom-0 right-0 text-sm">${messageDate}</p>
+          <p class="absolute ${message.isFile ? 'rounded-md bg-slate-700 p-1 text-white' : 'pr-1'} bottom-0 right-0 text-sm">${messageDate}</p>
 
           <div onclick="toggleDropdownOptions('${message._id}')" class="absolute top-0 -right-4 opacity-75 rounded-full bg-slate-600 cursor-pointer">
             <img class="w-7 h-7" src="./img/arrow-down.svg">
