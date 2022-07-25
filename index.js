@@ -127,7 +127,7 @@ function showMyChats() {
   messageInput.addEventListener("keypress", async evt => {
     if(evt.keyCode === 13) {
       if(Object.keys(destiny).length !== 0 && messageInput.value.trim()) {
-        sendMessage();
+        sendMessage({isFile:false});
         messageInput.value = "";
       }
 
@@ -137,8 +137,7 @@ function showMyChats() {
         messageInput.value = `
           <img class="w-36 h-36" src="${location}">
         `;
-        console.log(messageInput.value);
-        sendMessage();
+        sendMessage({isFile:true});
         messageInput.value = "";
         clearImgInput();
       }
@@ -526,16 +525,50 @@ function renderSocketMessages(chat) {
   const messagesComponent = document.querySelector("#messages");
   messagesComponent.innerHTML = "";
   chat.messages.forEach(message => {
+    const createdAt = new Date(message.createdAt);
+    const hours = createdAt.getHours();
+    const minutes = createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes();
+    const messageDate = `${hours}:${minutes} hrs.`;
+
+    if(message.isFile) {
+      const [, location] = message.content.match(/^.*src="(.*)".*$/);
+    }
+
     const sender = message.idSender === user.id;
     messagesComponent.innerHTML += `
-      <div class="flex ${sender ? 'justify-end' : 'justify-start'}">
-        <div class="rounded-md p-2 ${sender ? 'text-white' : 'text-black'} ${sender ? 'bg-blue-500' : 'bg-gray-300'}">${message.content}</div>
+      <div class="flex ${sender ? 'justify-end mr-4' : 'justify-start ml-4'}">
+        <div class="relative rounded-md p-2 ${message.isFile ? '' : 'pr-[75px]'} ${sender ? 'text-white' : 'text-black'} ${sender ? 'bg-blue-500' : 'bg-gray-300'}">
+          ${message.content}
+          <p class="absolute ${message.isFile ? 'rounded-md bg-slate-700 p-1' : 'pr-1'} bottom-0 right-0 text-sm">${messageDate}</p>
+
+          <div onclick="toggleDropdownOptions('${message._id}')" class="absolute top-0 -right-4 opacity-75 rounded-full bg-slate-600 cursor-pointer">
+            <img class="w-7 h-7" src="./img/arrow-down.svg">
+          </div>
+          <div id="message-options-${message._id}" class="hidden z-20 absolute top-5 -right-4 min-w-max	py-2 text-white bg-slate-700">
+            <p onclick="showEditModal('${encodeURIComponent(JSON.stringify(message))}')" class="p-2 cursor-pointer hover:bg-slate-800">Editar mensaje</p>
+            <p onclick="showDeleteModal('${encodeURIComponent(JSON.stringify(message))}')" class="p-2 cursor-pointer hover:bg-slate-800">Eliminar mensaje</pclass=>
+          </div>
+        </div>
       </div>
     `;
   });
 }
 
-function sendMessage() {
+function toggleDropdownOptions(idMessage) {
+  document.querySelector(`#message-options-${idMessage}`).classList.toggle("hidden");
+}
+
+function showEditModal(messageData) {
+  const message = JSON.parse(decodeURIComponent(messageData));
+  console.log(message);
+}
+
+function showDeleteModal(messageData) {
+  const message = JSON.parse(decodeURIComponent(messageData));
+  console.log(message);
+}
+
+function sendMessage({isFile}) {
   const messageInput = document.querySelector("#messageInput");
-  socket.emit("sendMessage", messageInput.value);
+  socket.emit("sendMessage", messageInput.value, isFile);
 }
