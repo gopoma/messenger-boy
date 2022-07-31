@@ -526,9 +526,15 @@ function renderSocketMessages(chat) {
   messagesComponent.innerHTML = "";
   chat.messages.forEach(message => {
     const createdAt = new Date(message.createdAt);
+
+    const date = createdAt.getDate();
+    const isToday = date === new Date().getDate();
+    const month = createdAt.getMonth();
+    const year = createdAt.getFullYear();
+
     const hours = createdAt.getHours();
     const minutes = createdAt.getMinutes() < 10 ? `0${createdAt.getMinutes()}` : createdAt.getMinutes();
-    const messageDate = `${hours}:${minutes} hrs.`;
+    const messageDate = `${isToday ? `${"Today"}` : `${date}/${month}/${year}`} ${hours}:${minutes} hrs.`;
     let downloadComponent = "";
     let contentComponent = message.content;
 
@@ -541,7 +547,7 @@ function renderSocketMessages(chat) {
     const sender = message.idSender === user.id;
     messagesComponent.innerHTML += `
       <div class="flex ${sender ? 'justify-end mr-4' : 'justify-start ml-4'}">
-        <div class="relative rounded-md p-2 ${message.isFile ? '' : 'pr-[75px]'} ${sender ? 'text-white' : 'text-black'} ${sender ? 'bg-blue-500' : 'bg-gray-300'}">
+        <div class="relative rounded-md p-2 ${message.isFile ? '' : `${isToday ? 'pr-[120px]' : 'pr-[145px]'}`} ${sender ? 'text-white' : 'text-black'} ${sender ? 'bg-blue-500' : 'bg-gray-300'}">
           ${contentComponent}
           <p class="absolute ${message.isFile ? 'rounded-md bg-slate-700 p-1 text-white' : 'pr-1'} bottom-0 right-0 text-sm">${messageDate}</p>
 
