@@ -510,10 +510,14 @@ function connectSocket() {
   socket.on("messageSended", chat => {
     showChannels();
     renderSocketMessages(chat);
+    const messagesComponent = document.querySelector("#messages");
+    messagesComponent.scrollTop = messagesComponent.scrollHeight;
   });
 
   socket.on("messages", chat => {
     renderSocketMessages(chat);
+    const messagesComponent = document.querySelector("#messages");
+    messagesComponent.scrollTop = messagesComponent.scrollHeight;
   })
 
   socket.on("readChat", () => {
