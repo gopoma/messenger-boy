@@ -528,6 +528,13 @@ function connectSocket() {
 
   socket.on("messageDeleted", chat => {
     renderSocketMessages(chat);
+  });
+
+  socket.on("messageDeletedNotification", chatData => {
+    const { senderID, chat } = chatData;
+    if(lookingAtChats && senderID === destiny._id) {
+      renderSocketMessages(chat);
+    }
   })
 }
 
@@ -559,7 +566,10 @@ function renderSocketMessages(chat) {
       messagesComponent.innerHTML += `
         <div class="flex ${sender ? 'justify-end mr-4' : 'justify-start ml-4'}">
           <div class="relative rounded-md p-2 ${isToday ? 'pr-[120px]' : 'pr-[145px]'} ${sender ? 'text-white' : 'text-black'} ${sender ? 'bg-blue-500' : 'bg-gray-300'}">
-            <p class="italic">You've deleted this message</p>
+            <p class="italic flex gap-2 items-center">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class=""><path fill-rule="evenodd" clip-rule="evenodd" d="M7.759 6.43a7 7 0 0 1 9.81 9.81l-9.81-9.81ZM6.357 7.858a7 7 0 0 0 9.786 9.786L6.357 7.857ZM12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" fill="currentColor"></path></svg>
+              <span>${sender ? "You've deleted this message" : "This message has been deleted"}</span>
+            </p>
             <p class="absolute 'pr-1 bottom-0 right-0 text-sm">${messageDate}</p>
           </div>
         </div>
