@@ -586,12 +586,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function showFullImgModal(location) {
   document.querySelector("#modal").classList.add("modal--show");
-  document.querySelector("#modalContent").innerHTML = `
-    <div id="modalCloser" class="absolute top-0 right-0 px-3 py-1 text-lg text-white bg-red-600 hover:bg-red-800 cursor-pointer transition-colors">✘</div>
-    <img class="border-4 border-black w-full h-full" src="${location}">
-    <a href="${location}" target="_blank"></a>
+  document.querySelector("#modal").innerHTML = `
+    <div class="modal__content">
+      <img class="border-4 border-black w-96 h-96" src="${location}">
+    </div>
   `;
-  document.querySelector("#modalCloser").addEventListener("click", () => {document.querySelector("#modal").classList.remove("modal--show")});
+}
+
+function closeGenericModal() {
+  document.querySelector("#modal").classList.remove("modal--show");
 }
 
 function toggleDropdownOptions(idMessage) {
@@ -628,6 +631,26 @@ function showEditModal(messageData) {
 function showDeleteModal(messageData) {
   const message = JSON.parse(decodeURIComponent(messageData));
   console.log(message);
+
+  document.querySelector("#modal").classList.add("modal--show");
+  document.querySelector("#modal").innerHTML = `
+    <div id="modalContent" class="modal__content bg-slate-200">
+      <div class="flex justify-end items-center">
+        <div onclick="closeGenericModal()" class="right-0 px-3 py-1 text-lg text-white bg-red-600 hover:bg-red-800 cursor-pointer transition-colors">✘</div>
+      </div>
+      <div class="p-4 flex flex-col gap-2">
+        <p>Are you sure you want to delete this message?</p>
+        <div class="flex gap-2 justify-end align-items-center">
+          <button onclick="doDeleteMessage('${message._id}')" class="p-2 text-white font-bold bg-red-600 hover:bg-red-800 cursor-pointer transition-colors">Delete</button>
+          <button onclick="closeGenericModal()" class="p-2 text-white font-bold bg-slate-600 hover:bg-slate-800 cursor-pointer transition-colors">Cancel</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function doDeleteMessage(idMessage) {
+  console.log(idMessage);
 }
 
 function sendMessage({isFile}) {
