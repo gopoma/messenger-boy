@@ -578,7 +578,7 @@ function showFullImgModal(location) {
   document.querySelector("#modal").classList.add("modal--show");
   document.querySelector("#modalContent").innerHTML = `
     <div id="modalCloser" class="absolute top-0 right-0 px-3 py-1 text-lg text-white bg-red-600 hover:bg-red-800 cursor-pointer transition-colors">✘</div>
-    <img class="border-4 border-black object-cover w-full h-full" src="${location}">
+    <img class="border-4 border-black w-full h-full" src="${location}">
     <a href="${location}" target="_blank"></a>
   `;
   document.querySelector("#modalCloser").addEventListener("click", () => {document.querySelector("#modal").classList.remove("modal--show")});
