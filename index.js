@@ -495,6 +495,8 @@ function connectSocket() {
       const lookingAtHasSentMessage = senderID === destiny._id;
       if(lookingAtHasSentMessage) {
         renderSocketMessages(chat);
+        const messagesComponent = document.querySelector("#messages");
+        messagesComponent.scrollTop = messagesComponent.scrollHeight;
       } else {
         console.log("Another target than lookingAt has sent a message");
       }
