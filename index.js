@@ -559,9 +559,23 @@ function renderSocketMessages(chat) {
   });
 }
 
-// TODO: Implement showFullImgModal functionality
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.querySelector("#modal");
+  modal.addEventListener("click", evt => {
+    if(evt.target.classList.contains("modal")) {
+      modal.classList.remove("modal--show");
+    }
+  });
+});
+
 function showFullImgModal(location) {
-  console.log("Showing a Modal with this location:", location);
+  document.querySelector("#modal").classList.add("modal--show");
+  document.querySelector("#modalContent").innerHTML = `
+    <div id="modalCloser" class="absolute top-0 right-0 px-3 py-1 text-lg text-white bg-red-600 hover:bg-red-800 cursor-pointer transition-colors">✘</div>
+    <img class="border-4 border-black object-cover w-full h-full" src="${location}">
+    <a href="${location}" target="_blank"></a>
+  `;
+  document.querySelector("#modalCloser").addEventListener("click", () => {document.querySelector("#modal").classList.remove("modal--show")});
 }
 
 function toggleDropdownOptions(idMessage) {

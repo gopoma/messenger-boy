@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>messenger-boy</title>
+  <link rel="stylesheet" href="./styles.css">
   <script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="./index.js"></script>
@@ -34,28 +35,10 @@
   </footer>
   <!-- /Footer -->
 
-  <!-- 
-  <a href="http://localhost:4000/api/auth/google">Login with Google</a>
-  <button onclick="doLogout()">Logout</button>
-  
-  <hr>
-  <div>
-    <input type="email" id="email">
-    <input type="password" id="password">
-    <button onclick="doLogin()">Login</button>
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div id="modalContent" class="modal__content"></div>
   </div>
-
-  <hr>
-  <div>
-    <input type="text" id="idChat">
-    <button onclick="beginChat()">Begin</button>
-  </div>
-
-  <hr>
-  <div>
-    <input type="text" id="message" placeholder="message">
-    <button onclick="sendMessage()">Send Message</button>
-  </div>
-  -->
+  <!-- /Modal -->
 </body>
 </html>
