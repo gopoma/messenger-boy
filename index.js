@@ -557,13 +557,17 @@ function renderSocketMessages(chat) {
           ${contentComponent}
           <p class="absolute ${message.isFile ? 'rounded-md bg-slate-700 p-1 text-white' : 'pr-1'} bottom-0 right-0 text-sm">${messageDate}</p>
 
-          <div onclick="toggleDropdownOptions('${message._id}')" class="absolute top-0 -right-4 opacity-75 rounded-full bg-slate-600 cursor-pointer">
-            <img class="w-7 h-7" src="./img/arrow-down.svg">
-          </div>
+          ${sender || message.isFile ? `
+            <div onclick="toggleDropdownOptions('${message._id}')" class="absolute top-0 -right-4 opacity-75 rounded-full bg-slate-600 cursor-pointer">
+              <img class="w-7 h-7" src="./img/arrow-down.svg">
+            </div>`
+          : ""}
           <div id="message-options-${message._id}" class="hidden z-20 absolute top-5 -right-4 min-w-max	py-2 text-white bg-slate-700">
             ${downloadComponent}
-            <p onclick="showEditModal('${encodeURIComponent(JSON.stringify(message))}')" class="p-2 cursor-pointer hover:bg-slate-800">Editar mensaje</p>
-            <p onclick="showDeleteModal('${encodeURIComponent(JSON.stringify(message))}')" class="p-2 cursor-pointer hover:bg-slate-800">Eliminar mensaje</pclass=>
+            ${sender ? 
+              `<p onclick="showEditModal('${encodeURIComponent(JSON.stringify(message))}')" class="p-2 cursor-pointer hover:bg-slate-800">Editar mensaje</p>
+              <p onclick="showDeleteModal('${encodeURIComponent(JSON.stringify(message))}')" class="p-2 cursor-pointer hover:bg-slate-800">Eliminar mensaje</p>` 
+            : ""}
           </div>
         </div>
       </div>
