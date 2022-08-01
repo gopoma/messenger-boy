@@ -477,11 +477,11 @@ function connectSocket() {
   socket.emit("userConnected");
 
   socket.on("userConnected", activeUsers => {
-    console.log(activeUsers);
+    // console.log(activeUsers);
   });
   
   socket.on("userDisconnected", activeUsers => {
-    console.log(activeUsers);
+    // console.log(activeUsers);
   });
 
   // destiny is the channel that we are lookingAt
