@@ -659,7 +659,6 @@ function downloadFile(location) {
   .catch(console.log)
 }
 
-// TODO: Implement Edit message functionality
 function showEditModal(messageData) {
   const message = JSON.parse(decodeURIComponent(messageData));
 
