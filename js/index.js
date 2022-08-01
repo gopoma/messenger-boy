@@ -65,7 +65,6 @@ function showMenuUserLogged() {
   menu.innerHTML = `
     <p onclick="showHome()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">Home</p>
     <p onclick="showMyChats()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">My Chats</p>
-    <p onclick="showUserData()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">Show Data</p>
     <div class="relative">
       <p onclick="toggleUserActions()" class="rounded-md px-3 py-2 cursor-pointer transition-colors hover:bg-slate-600">${user.name}</p>
       <div id="userActions" class="hidden absolute">
@@ -242,15 +241,6 @@ function bootstrapChat(idUser) {
 
 function beginChat(idChat) {
   socket.emit("beginChat", idChat);
-}
-
-// Debugging function
-function showUserData() {
-  console.log(user);
-  fetch(`${BASE_URL}/api/chats`, {credentials:"include"})
-  .then(response => response.json())
-  .then(console.log)
-  .catch(console.log)
 }
 
 function toggleUserActions() {
