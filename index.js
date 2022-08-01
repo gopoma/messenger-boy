@@ -600,15 +600,6 @@ function renderSocketMessages(chat) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const modal = document.querySelector("#modal");
-  modal.addEventListener("click", evt => {
-    if(evt.target.classList.contains("modal")) {
-      modal.classList.remove("modal--show");
-    }
-  });
-});
-
 function showFullImgModal(location) {
   document.querySelector("#modal").classList.add("modal--show");
   document.querySelector("#modal").innerHTML = `
@@ -616,6 +607,15 @@ function showFullImgModal(location) {
       <img class="border-4 border-black w-96 h-96" src="${location}">
     </div>
   `;
+
+  const modal = document.querySelector("#modal");
+  const handleOutsideClick = evt => {
+    if(evt.target.classList.contains("modal")) {
+      modal.classList.remove("modal--show");
+      modal.removeEventListener("click", handleOutsideClick, true);
+    }
+  }
+  modal.addEventListener("click", handleOutsideClick, true);
 }
 
 function closeGenericModal() {
@@ -650,9 +650,20 @@ function downloadFile(location) {
 function showEditModal(messageData) {
   const message = JSON.parse(decodeURIComponent(messageData));
   console.log(message);
+
+  document.querySelector("#modal").classList.add("modal--show");
+  document.querySelector("#modal").innerHTML = `
+    <div id="modalContent" class="modal__content bg-slate-200">
+      <div class="flex justify-end items-center">
+        <div onclick="closeGenericModal()" class="right-0 px-3 py-1 text-lg text-white bg-red-600 hover:bg-red-800 cursor-pointer transition-colors">✘</div>
+      </div>
+      <div class="p-4">
+        
+      </div>
+    </div>
+  `;
 }
 
-// TODO: Implement Delete message functionality
 function showDeleteModal(messageData) {
   const message = JSON.parse(decodeURIComponent(messageData));
 
