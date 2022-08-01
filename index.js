@@ -286,19 +286,19 @@ function showLoginView() {
         <input class="border border-sky-300 p-2" type="password" id="password" placeholder="Enter your Password">
         <button onclick="doLogin()" class="p-2 font-bold text-white bg-blue-600 transition-colors hover:bg-blue-800">Login</button>
 
-        <a href="http://localhost:4000/api/auth/google" class="p-1 flex gap-2 items-center bg-blue-500 transition-colors hover:bg-blue-600">
+        <a href="${BASE_URL}/api/auth/google" class="p-1 flex gap-2 items-center bg-blue-500 transition-colors hover:bg-blue-600">
           <img class="w-10 h-10 p-2 bg-white" src="./img/google.svg" alt="Login with Google"></img>
           <span class="font-bold text-white">Login with Google</span>
         </a>
-        <a href="http://localhost:4000/api/auth/facebook" class="p-2 flex gap-2 items-center bg-blue-800 transition-colors hover:bg-blue-900">
+        <a href="${BASE_URL}/api/auth/facebook" class="p-2 flex gap-2 items-center bg-blue-800 transition-colors hover:bg-blue-900">
           <img class="w-8 h-8" src="./img/facebook.svg">
           <span class="font-bold text-white">Login with Facebook</span>
         </a>
-        <a href="http://localhost:4000/api/auth/twitter" class="p-2 flex gap-2 items-center bg-blue-400 transition-colors hover:bg-blue-500">
+        <a href="${BASE_URL}/api/auth/twitter" class="p-2 flex gap-2 items-center bg-blue-400 transition-colors hover:bg-blue-500">
           <img class="w-8 h-8" src="./img/twitter.svg">
           <span class="font-bold text-white">Login with Twitter</span>
         </a>
-        <a href="http://localhost:4000/api/auth/github" class="p-2 flex gap-2 items-center bg-slate-800 transition-colors hover:bg-slate-900">
+        <a href="${BASE_URL}/api/auth/github" class="p-2 flex gap-2 items-center bg-slate-800 transition-colors hover:bg-slate-900">
           <img class="w-8 h-8" src="./img/github.svg">
           <span class="font-bold text-white">Login with GitHub</span>
         </a>
@@ -361,19 +361,19 @@ function showSignUpView() {
         </div>
         <button onclick="doSignUp()" class="p-2 font-bold text-white bg-blue-600 transition-colors hover:bg-blue-800" onclick="doSignUp()">SignUp</button>
 
-        <a href="http://localhost:4000/api/auth/google" class="p-1 flex gap-2 items-center bg-blue-500 transition-colors hover:bg-blue-600">
+        <a href="${BASE_URL}/api/auth/google" class="p-1 flex gap-2 items-center bg-blue-500 transition-colors hover:bg-blue-600">
           <img class="w-10 h-10 p-2 bg-white" src="./img/google.svg" alt="Login with Google"></img>
           <span class="font-bold text-white">SignUp with Google</span>
         </a>
-        <a href="http://localhost:4000/api/auth/facebook" class="p-2 flex gap-2 items-center bg-blue-800 transition-colors hover:bg-blue-900">
+        <a href="${BASE_URL}/api/auth/facebook" class="p-2 flex gap-2 items-center bg-blue-800 transition-colors hover:bg-blue-900">
           <img class="w-8 h-8" src="./img/facebook.svg">
           <span class="font-bold text-white">SignUp with Facebook</span>
         </a>
-        <a href="http://localhost:4000/api/auth/twitter" class="p-2 flex gap-2 items-center bg-blue-400 transition-colors hover:bg-blue-500">
+        <a href="${BASE_URL}/api/auth/twitter" class="p-2 flex gap-2 items-center bg-blue-400 transition-colors hover:bg-blue-500">
           <img class="w-8 h-8" src="./img/twitter.svg">
           <span class="font-bold text-white">SignUp with Twitter</span>
         </a>
-        <a href="http://localhost:4000/api/auth/github" class="p-2 flex gap-2 items-center bg-slate-800 transition-colors hover:bg-slate-900">
+        <a href="${BASE_URL}/api/auth/github" class="p-2 flex gap-2 items-center bg-slate-800 transition-colors hover:bg-slate-900">
           <img class="w-8 h-8" src="./img/github.svg">
           <span class="font-bold text-white">SignUp with GitHub</span>
         </a>
@@ -470,7 +470,7 @@ function doLogout() {
 }
 
 function connectSocket() {
-  socket = io.connect("http://localhost:4000", {
+  socket = io.connect(BASE_URL, {
     withCredentials: true
   });
 
