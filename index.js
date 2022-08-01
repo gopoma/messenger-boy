@@ -262,7 +262,7 @@ function renderMessages(messages) {
   messagesComponent.innerHTML = "";
   messages.forEach(message => {
     messagesComponent.innerHTML += `
-      <div class="p-3 flex gap-4 justify-between items-center text-red-700 bg-red-100">
+      <div class="z-[125] p-3 flex gap-4 justify-between items-center text-red-700 bg-red-100">
         <span>${message}</span>
         <span class="messageCloser cursor-pointer transition-colors hover:text-red-900">✘</span>
       </div>
@@ -662,15 +662,30 @@ function showEditModal(messageData) {
       <div class="p-4 flex flex-col gap-2">
         <h4 class="text-lg font-bold text-center">Edit Message</h4>
         <div class="flex flex-col gap-2">
-          <textarea class="border border-sky-300 p-2" cols="49" rows="3">${message.content}</textarea>
+          <textarea id="messageEditInput" class="border border-sky-300 p-2" cols="49" rows="3">${message.content}</textarea>
           <div class="flex gap-2 justify-end">
-            <button class="rounded px-3 py-2 font-bold text-white bg-blue-600 hover:bg-blue-800 cursor-pointer transition-colors">Edit</button>
+            <button id="btnEdit" onclick="doEditMessage('${message._id}')" class="rounded px-3 py-2 font-bold text-white bg-blue-600 hover:bg-blue-800 cursor-pointer transition-colors">Edit</button>
             <button onclick="closeGenericModal()" class="rounded px-3 py-2 font-bold text-white bg-slate-600 hover:bg-slate-800 cursor-pointer transition-colors">Cancel</button>
           </div>
         </div>
       </div>
     </div>
   `;
+
+  const btnEdit = document.querySelector("#btnEdit");
+  document.querySelector("#messageEditInput").addEventListener("keypress", evt => {
+    if(evt.keyCode === 13) {doEditMessage(message._id);}
+  });
+}
+
+function doEditMessage(idMessage) {
+  const content = document.querySelector("#messageEditInput").value;
+  if(!content) {
+    renderMessages(["Please, provide message content"])
+    return;
+  }
+  console.log("idMessage:", idMessage);
+  console.log("content:", content);
 }
 
 function showDeleteModal(messageData) {
