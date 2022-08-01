@@ -589,8 +589,10 @@ function renderSocketMessages(chat) {
             <div id="message-options-${message._id}" class="hidden z-20 absolute top-5 -right-4 min-w-max	py-2 text-white bg-slate-700">
               ${downloadComponent}
               ${sender ? 
-                `<p onclick="showEditModal('${encodeURIComponent(JSON.stringify(message))}')" class="p-2 cursor-pointer hover:bg-slate-800">Editar mensaje</p>
-                <p onclick="showDeleteModal('${encodeURIComponent(JSON.stringify(message))}')" class="p-2 cursor-pointer hover:bg-slate-800">Eliminar mensaje</p>` 
+                `${!message.isFile ?
+                  `<p onclick="showEditModal('${encodeURIComponent(JSON.stringify(message))}')" class="p-2 cursor-pointer hover:bg-slate-800">Editar mensaje</p>`
+                  : ""}
+                  <p onclick="showDeleteModal('${encodeURIComponent(JSON.stringify(message))}')" class="p-2 cursor-pointer hover:bg-slate-800">Eliminar mensaje</p>` 
               : ""}
             </div>
           </div>
@@ -657,8 +659,15 @@ function showEditModal(messageData) {
       <div class="flex justify-end items-center">
         <div onclick="closeGenericModal()" class="right-0 px-3 py-1 text-lg text-white bg-red-600 hover:bg-red-800 cursor-pointer transition-colors">✘</div>
       </div>
-      <div class="p-4">
-        
+      <div class="p-4 flex flex-col gap-2">
+        <h4 class="text-lg font-bold text-center">Edit Message</h4>
+        <div class="flex flex-col gap-2">
+          <textarea class="border border-sky-300 p-2" cols="49" rows="3">${message.content}</textarea>
+          <div class="flex gap-2 justify-end">
+            <button class="rounded px-3 py-2 font-bold text-white bg-blue-600 hover:bg-blue-800 cursor-pointer transition-colors">Edit</button>
+            <button onclick="closeGenericModal()" class="rounded px-3 py-2 font-bold text-white bg-slate-600 hover:bg-slate-800 cursor-pointer transition-colors">Cancel</button>
+          </div>
+        </div>
       </div>
     </div>
   `;
@@ -676,8 +685,8 @@ function showDeleteModal(messageData) {
       <div class="p-4 flex flex-col gap-2">
         <p>Are you sure you want to delete this message?</p>
         <div class="flex gap-2 justify-end align-items-center">
-          <button onclick="doDeleteMessage('${message._id}')" class="p-2 text-white font-bold bg-red-600 hover:bg-red-800 cursor-pointer transition-colors">Delete</button>
-          <button onclick="closeGenericModal()" class="p-2 text-white font-bold bg-slate-600 hover:bg-slate-800 cursor-pointer transition-colors">Cancel</button>
+          <button onclick="doDeleteMessage('${message._id}')" class="rounded px-3 py-2 text-white font-bold bg-red-600 hover:bg-red-800 cursor-pointer transition-colors">Delete</button>
+          <button onclick="closeGenericModal()" class="rounded px-3 py-2 text-white font-bold bg-slate-600 hover:bg-slate-800 cursor-pointer transition-colors">Cancel</button>
         </div>
       </div>
     </div>
