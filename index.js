@@ -535,7 +535,18 @@ function connectSocket() {
     if(lookingAtChats && senderID === destiny._id) {
       renderSocketMessages(chat);
     }
-  })
+  });
+
+  socket.on("messageEdited", chat => {
+    renderSocketMessages(chat);
+  });
+
+  socket.on("messageEditedNotification", chatData => {
+    const { senderID, chat } = chatData;
+    if(lookingAtChats && senderID === destiny._id) {
+      renderSocketMessages(chat);
+    }
+  });
 }
 
 function renderSocketMessages(chat) {
@@ -651,7 +662,6 @@ function downloadFile(location) {
 // TODO: Implement Edit message functionality
 function showEditModal(messageData) {
   const message = JSON.parse(decodeURIComponent(messageData));
-  console.log(message);
 
   document.querySelector("#modal").classList.add("modal--show");
   document.querySelector("#modal").innerHTML = `
@@ -672,7 +682,6 @@ function showEditModal(messageData) {
     </div>
   `;
 
-  const btnEdit = document.querySelector("#btnEdit");
   document.querySelector("#messageEditInput").addEventListener("keypress", evt => {
     if(evt.keyCode === 13) {doEditMessage(message._id);}
   });
@@ -684,8 +693,9 @@ function doEditMessage(idMessage) {
     renderMessages(["Please, provide message content"])
     return;
   }
-  console.log("idMessage:", idMessage);
-  console.log("content:", content);
+
+  socket.emit("editMessage", idMessage, content);
+  document.querySelector("#modal").classList.remove("modal--show");
 }
 
 function showDeleteModal(messageData) {
