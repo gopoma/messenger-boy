@@ -1,6 +1,6 @@
 "use strict";
-const production = false;
-const BASE_URL = production ? "" : "http://localhost:4000";
+const production = true;
+const BASE_URL = production ? "https://sheltered-bayou-69616.herokuapp.com" : "http://localhost:4000";
 let user = {}; // Filled when Validation or Login or SignUp goes successfully
 let socket;
 let destiny = {};
